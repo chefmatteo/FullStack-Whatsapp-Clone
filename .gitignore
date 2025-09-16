@@ -1,0 +1,11 @@
+*thought_process.md
+*.exe
+*.out
+*.bin
+*.dll
+*.app
+*.msi
+*.deb
+*.rpm
+*.sh
+*.bat
