@@ -1,0 +1,4 @@
+# ignore all files in the build folder
+node_modules 
+.prettierrc.yml 
+package.json

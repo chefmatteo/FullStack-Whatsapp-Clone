@@ -1,17 +1,34 @@
+//main entry point of the application
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './appProps';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
   //react is now going to render the App component into the root element
   //root here is the div with the id root in the public/index.html file
 );
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#306759', //Primary #306759
+    },
+    secondary: {
+      main: '#79e352', //Secondary #79e352
+    },
+  },
+});
+
 root.render(
   <React.StrictMode>
-    <App name="Matthew" />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
