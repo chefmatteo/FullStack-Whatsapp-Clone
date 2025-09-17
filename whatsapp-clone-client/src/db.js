@@ -1,4 +1,7 @@
-export const messages = [
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.chats = exports.messages = void 0;
+exports.messages = [
   {
     id: '1',
     content: 'You on your way?',
@@ -20,30 +23,29 @@ export const messages = [
     createdAt: new Date(Date.now() - 14 * 24 * 60 * 1000 * 1000),
   },
 ];
-
-export const chats = [
+exports.chats = [
   {
     id: '1',
     name: 'Ethan Gonzalez',
     picture: 'https://randomuser.me/api/portraits/thumb/men/1.jpg',
-    lastMessage: messages.find(m => m.id === '1'),
+    lastMessage: exports.messages.find(m => m.id === '1'),
   },
   {
     id: '2',
     name: 'Bryan Wallace',
     picture: 'https://randomuser.me/api/portraits/thumb/men/2.jpg',
-    lastMessage: messages.find(m => m.id === '2'),
+    lastMessage: exports.messages.find(m => m.id === '2'),
   },
   {
     id: '3',
     name: 'Avery Stewart',
     picture: 'https://randomuser.me/api/portraits/thumb/women/1.jpg',
-    lastMessage: messages.find(m => m.id === '3'),
+    lastMessage: exports.messages.find(m => m.id === '3'),
   },
   {
     id: '4',
     name: 'Katie Peterson',
     picture: 'https://randomuser.me/api/portraits/thumb/women/2.jpg',
-    lastMessage: messages.find(m => m.id === '4'),
+    lastMessage: exports.messages.find(m => m.id === '4'),
   },
 ];

@@ -18,7 +18,7 @@ const StyledListItem = styled(ListItem)`
   padding: 0 15px;
   display: flex;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #f5f5f5;
   }
@@ -64,7 +64,7 @@ const MessageDate = styled.div`
 const ChatsList = () => (
   <Container>
     <StyledList>
-      {chats.map((chat) => (
+      {chats.map(chat => (
         <StyledListItem key={chat.id}>
           <ChatPicture src={chat.picture} alt="Profile" />
           <ChatInfo>

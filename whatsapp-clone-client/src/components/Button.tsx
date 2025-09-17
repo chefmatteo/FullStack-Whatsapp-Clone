@@ -21,10 +21,12 @@ const Button = styled.button<ButtonProps>`
     transform: translateY(-1px);
   }
 
-  ${props => props.primary && css`
-    background: palevioletred;
-    color: white;
-  `}
+  ${props =>
+    props.primary &&
+    css`
+      background: palevioletred;
+      color: white;
+    `}
 `;
 
 export default Button;
