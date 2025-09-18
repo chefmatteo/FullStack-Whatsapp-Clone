@@ -65,3 +65,4 @@ coverage/
 *.rpm
 *.sh
 *.bat
+.env

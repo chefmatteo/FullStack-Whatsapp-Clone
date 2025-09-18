@@ -1,9 +1,11 @@
 import express from 'express';
+import { chats } from './db';
 
 const app = express(); // Create an Express application
 const PORT = process.env.PORT || 4000; // Set the port for the server
 
-// Middleware
+// Middleware namely cors: 
+
 //app.use(express.json()); // Parse JSON bodies
 
 // Basic route
@@ -12,6 +14,10 @@ const PORT = process.env.PORT || 4000; // Set the port for the server
 
 app.get('/_ping', (req, res) => {
   res.send('pong');
+});
+
+app.get('/chats', (req, res) => {
+  res.json(chats);
 });
 
 app.listen(PORT, () => {
