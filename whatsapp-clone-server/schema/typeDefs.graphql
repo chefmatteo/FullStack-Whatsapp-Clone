@@ -1,0 +1,41 @@
+scalar Date
+scalar URL 
+
+# GraphQL scalar 係咩嚟？Scalar 就係最基本嘅數據類型，好似 String、Int、Boolean、emailaddress，或者自訂嘅 Date 同 URL。Scalar 唔可以有子欄位，主要用嚟做 schema 嘅最底層數據。
+# adding ! means that the field is required
+# no ! means that the field is optional
+
+
+# Example:
+#   chats: [Chat!]!
+#   - Always returns an array (never null).
+#   - Every element in the array is a non-null Chat object.
+
+# Resolvers Overview:
+# - Resolvers are functions that provide the data for each field in the schema.
+# - Each resolver's name matches the field it resolves.
+# - Resolvers receive the parent value as a parameter, can execute any logic (e.g., fetch from a database or API), and must return a value matching the field's type in the schema.
+
+type Message {
+    id : ID!
+    content: String!
+    createdAt: Date!
+}
+
+type Chat {
+    id: ID!
+    name: String!
+    picture: URL
+    lastMessage: Message
+}
+
+type Query {
+    chats: [Chat!]! 
+}
+
+
+    
+    # 外層 !：成個陣列一定唔可以係 null（即係一定會有一個陣列，可能係空，但唔會係 null）。
+    # 內層 Chat!：陣列入面每一個元素都一定係 Chat 物件，唔可以係 null。
+    # 總結：查詢 chats 會攞到一個只包含 Chat 物件（唔會有 null 元素）嘅陣列，而且成個陣列都唔會係 
+

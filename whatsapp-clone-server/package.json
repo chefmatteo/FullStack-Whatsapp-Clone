@@ -9,10 +9,16 @@
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
     "serve": "node index.js",
-    "format": "prettier --write \"*.{ts,js,json,md}\""
+    "format": "prettier --write \"*.{ts,js,json,md}\"",
+    "test": "jest"
+  },
+  "jest-junit":{
+    "outputdirectory": "./test-results"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "5.0.3",
+    "@types/graphql": "14.5.0",
     "@types/node": "24.5.1",
     "nodemon": "3.1.10",
     "prettier": "3.6.2",
@@ -20,7 +26,28 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
+    "@graphql-tools/schema": "^10.0.25",
+    "apollo-server-express": "3.13.0",
     "cors": "2.8.5",
-    "express": "5.1.0"
+    "express": "^4.18.2",
+    "graphql": "16.11.0",
+    "graphql-import": "1.0.2",
+    "graphql-scalars": "1.24.2",
+    "graphql-tools": "9.0.20"
+  }, 
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
+    "globalSetup": "<rootDir>/tests/global-setup.ts",
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   }
 }
