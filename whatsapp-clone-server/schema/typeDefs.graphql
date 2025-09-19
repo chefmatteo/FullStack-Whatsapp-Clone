@@ -27,10 +27,14 @@ type Chat {
     name: String!
     picture: URL
     lastMessage: Message
+    messages: [Message!]!
 }
 
 type Query {
-    chats: [Chat!]! 
+    chats: [Chat!]!
+    # The chat query takes a parameter (chatId), which will be provided to the resolver as the second argument (args) in the resolver function.
+    # Example: chat(chatId: "1") will result in resolver(parent, { chatId }, context, info)
+    chat(chatId: ID!): Chat
 }
 
 

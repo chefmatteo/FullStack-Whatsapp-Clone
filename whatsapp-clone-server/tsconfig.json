@@ -15,8 +15,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["jest", "node"]
   },
-  "include": ["*.ts", "src/**/*.ts"],
+  "include": ["*.ts", "src/**/*.ts", "tests/**/*.ts", "schema/**/*.ts"],
   "exclude": ["node_modules", "dist", "../whatsapp-clone-client"]
 }

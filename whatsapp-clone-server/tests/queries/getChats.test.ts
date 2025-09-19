@@ -12,7 +12,7 @@ describe('Query.chats', () => {
     });
   });
 
-  it('fetches all chats', async () => {
+  it('should fetch all chats', async () => {
     const GET_CHATS = gql`
       query GetChats {
         chats {
@@ -34,18 +34,8 @@ describe('Query.chats', () => {
     
     expect(res.errors).toBeUndefined();
     expect(res.data).toBeDefined();
-    expect(res.data?.chats).toBeDefined();
-    expect(Array.isArray(res.data?.chats)).toBe(true);
-    expect(res.data?.chats.length).toBeGreaterThan(0);
     
-    // Check the structure of the first chat
-    const firstChat = res.data?.chats[0];
-    expect(firstChat).toHaveProperty('id');
-    expect(firstChat).toHaveProperty('name');
-    expect(firstChat).toHaveProperty('picture');
-    expect(firstChat).toHaveProperty('lastMessage');
-    expect(firstChat.lastMessage).toHaveProperty('id');
-    expect(firstChat.lastMessage).toHaveProperty('content');
-    expect(firstChat.lastMessage).toHaveProperty('createdAt');
+    // Snapshot test to ensure data structure matches expected projection from db.ts
+    expect(res.data).toMatchSnapshot();
   });
 });

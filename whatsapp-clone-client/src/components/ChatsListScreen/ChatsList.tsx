@@ -3,8 +3,9 @@ import React from 'react';
 import moment from 'moment';
 import { List, ListItem } from '@mui/material';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react'; 
+import { useCallback, useEffect, useState } from 'react'; 
 //used for fetching data from the server
+import {History} from 'history';
 
 
 const Container = styled.div`
@@ -106,14 +107,21 @@ query GetChats {
 `; 
  
 
-const ChatsList = () => {
+interface ChatsListProps {
+  //interface is a way to define the props that a component can receive
+  //props is property
+  //history is the object that is provided to us by the <Route /> component
+  history: History;
+}
+
+const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
   const [chats, setChats] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
         const body = await fetch(
-          `${process.env.REACT_APP_SERVER_URL ? process.env.REACT_APP_SERVER_URL : ''}/graphql`,
+          `${process.env.REACT_APP_SERVER_URL || 'http://localhost:4000'}/graphql`,
           {
             method: 'POST',
             headers: {
@@ -133,11 +141,23 @@ const ChatsList = () => {
     fetchChats();
   }, []);
 
+  const navToChat = useCallback(
+    (chat: any) => {
+      history.push(`chats/${chat.id}`);
+      //history is the object that is provided to us by the <Route /> component
+    },
+    [history]
+  );
+
   return (
+    //bind: bind the navToChat function to the chat object
     <Container>
       <StyledList>
         {chats.map((chat) => (
-            <StyledListItem key={chat.id} onClick={() => console.log('Chat clicked:', chat.id)}>
+          <StyledListItem
+            key={chat.id}
+            data-testid="chat"
+            onClick={navToChat.bind(null, chat)}>
             <ChatPicture
               data-testid="picture"
               src={chat.picture}

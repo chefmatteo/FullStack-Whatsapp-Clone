@@ -1,5 +1,11 @@
 import React from 'react';
-import { cleanup, render, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  waitFor,
+  fireEvent,
+  screen,
+} from '@testing-library/react';
 import ChatsList from './ChatsList';
 
 // Mock fetch for testing
@@ -10,41 +16,95 @@ describe('ChatsList', () => {
   afterEach(() => {
     cleanup();
     jest.clearAllMocks();
+
+    delete (window as any).location;
+    (window as any) = Object.create(window);
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: '/',
+      },
+      writable: true,
+    });
   });
 
   it('renders fetched chats data', async () => {
-    const mockData = {
-      data: {
-        chats: [
-          {
-            id: 1,
-            name: 'Foo Bar',
-            picture: 'https://localhost:4000/picture.jpg',
-            lastMessage: {
-              id: 1,
-              content: 'Hello',
-              createdAt: new Date('1 Jan 2019 00:00:00 GMT'),
-            },
-          },
-        ],
-      },
-    };
-
     mockFetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockData),
+      json: () => Promise.resolve({
+        data: {
+          chats: [
+            {
+              id: 1,
+              name: 'Foo Bar',
+              picture: 'https://localhost:4000/picture.jpg',
+              lastMessage: {
+                id: 1,
+                content: 'Hello',
+                createdAt: new Date('1 Jan 2019 00:00:00 GMT'),
+              },
+            },
+          ],
+        },
+      }),
     });
 
-    const { getByTestId } = render(<ChatsList />);
+    {
+      const mockHistory = {
+        push: jest.fn(),
+      };
 
-    // Wait for the component to load and display the mocked data
-    await waitFor(() => getByTestId('name'));
+      const { container, getByTestId } = render(
+        <ChatsList history={mockHistory as any} />
+      );
 
-    expect(getByTestId('name')).toHaveTextContent('Foo Bar');
-    expect(getByTestId('picture')).toHaveAttribute(
-      'src',
-      'https://localhost:4000/picture.jpg'
-    );
-    expect(getByTestId('content')).toHaveTextContent('Hello');
-    expect(getByTestId('date')).toHaveTextContent(/\d{2}:\d{2}/);
+      await waitFor(() => screen.getByTestId('name'));
+
+      expect(getByTestId('name')).toHaveTextContent('Foo Bar');
+      expect(getByTestId('picture')).toHaveAttribute(
+        'src',
+        'https://localhost:4000/picture.jpg'
+      );
+      expect(getByTestId('content')).toHaveTextContent('Hello');
+      expect(getByTestId('date')).toHaveTextContent(/\d{2}:\d{2}/);
+    }
+  });
+
+  it('should navigate to the target chat room on chat item click', async () => {
+    mockFetch.mockResolvedValueOnce({
+      json: () => Promise.resolve({
+        data: {
+          chats: [
+            {
+              id: 1,
+              name: 'Foo Bar',
+              picture: 'https://localhost:4000/picture.jpg',
+              lastMessage: {
+                id: 1,
+                content: 'Hello',
+                createdAt: new Date('1 Jan 2019 GMT'),
+              },
+            },
+          ],
+        },
+      }),
+    });
+
+    const mockHistoryPush = jest.fn();
+    const history = {
+      push: mockHistoryPush,
+    };
+
+    {
+      const { container, getByTestId } = render(
+        <ChatsList history={history as any} />
+      );
+
+      await waitFor(() => screen.getByTestId('chat'));
+
+      fireEvent.click(getByTestId('chat'));
+
+      await waitFor(() =>
+        expect(mockHistoryPush).toHaveBeenCalledWith('chats/1')
+      );
+    }
   });
 });
