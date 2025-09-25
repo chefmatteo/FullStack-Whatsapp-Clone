@@ -32,8 +32,11 @@ const App: React.FC = () => (
   <BrowserRouter>
     <AnimatedSwitch>
       <Route path="/chats" element={<ChatsListWrapper />} />
+
       <Route path="/chats/:chatId" element={<ChatRoomWrapper />} />
+
       <Route path="/" element={<Navigate to="/chats" replace />} />
+      
     </AnimatedSwitch>
   </BrowserRouter>
 );

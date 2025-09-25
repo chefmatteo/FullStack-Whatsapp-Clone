@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from 'react';
 //used for fetching data from the server
 import {History} from 'history';
 
-
 const Container = styled.div`
   height: calc(100% - 56px);
   overflow-y: overlay;
@@ -108,9 +107,6 @@ query GetChats {
  
 
 interface ChatsListProps {
-  //interface is a way to define the props that a component can receive
-  //props is property
-  //history is the object that is provided to us by the <Route /> component
   history: History;
 }
 

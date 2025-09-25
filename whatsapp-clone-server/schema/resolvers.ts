@@ -28,7 +28,6 @@ const resolvers = {
     chats(){
         return chats;
     },
-
     chat: (parent: any, args: { chatId: string }) => {
         return chats.find((c: any) => c.id === args.chatId);
     },

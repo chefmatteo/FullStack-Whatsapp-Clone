@@ -1,5 +1,17 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import ChatNavbar from './ChatNavbar';
+import MessagesList from './MessagesList';
+import MessageInput from './MessageInput';
+import {History} from 'history';
+
+const Container = styled.div`
+background: url(/assets/chat-background.png) no-repeat center center fixed;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 const getChatQuery = `
   query GetChat($chatId: ID!) {
@@ -18,15 +30,17 @@ const getChatQuery = `
 
 interface ChatRoomScreenParams {
   chatId: string;
+  history: History;
+  //history is for navigating back to the chats list
 }
 
-interface ChatQueryMessage {
+export interface ChatQueryMessage {
   id: string;
   content: string;
   createdAt: Date;
 }
 
-interface ChatQueryResult {
+export interface ChatQueryResult {
   id: string;
   name: string;
   picture: string;
@@ -45,6 +59,7 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
       try {
         setLoading(true);
         setError(null);
+        
         
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:4000'}/graphql`, {
           method: 'POST',
