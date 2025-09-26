@@ -54,11 +54,11 @@ const ChatNavbar: React.FC<ChatNavbarProps> = ({ chat }) => {
 
   return (
     <Container>
-      <BackButton onClick={navBack} aria-label="Go back to chats">
+      <BackButton data-testedid="back-button" onClick={navBack} aria-label="Go back to chats">
         <ArrowBackIcon />
       </BackButton>
-      <Picture src={chat.picture} alt={`${chat.name} profile picture`} />
-      <Name>{chat.name}</Name>
+      <Picture data-testedid="chat-picture" src={chat.picture} alt={`${chat.name} profile picture`} />
+      <Name data-testedid="chat-name">{chat.name}</Name>
     </Container>
   );
 };

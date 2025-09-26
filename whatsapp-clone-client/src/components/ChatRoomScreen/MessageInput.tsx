@@ -112,6 +112,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <Container>
       <InputField
+        data-testedid="message-input"
         type="text"
         placeholder="Type a message"
         value={message}
@@ -121,8 +122,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
         aria-label="Message input"
       />
       <SendButton
-        variant="contained"
-        onClick={handleSend}
+        data-testedid="send-button"
+        variant="contained" //used to style the button
+        color="primary" //used to style the button
+        onClick={handleSend} //used to send the message
         disabled={disabled || !message.trim()}
         aria-label="Send message"
       >

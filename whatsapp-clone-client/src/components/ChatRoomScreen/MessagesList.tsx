@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { ChatQueryMessage } from './index';
 
@@ -8,7 +8,8 @@ import { ChatQueryMessage } from './index';
  * 
  * Displays a list of chat messages with timestamps and styling
  * that resembles WhatsApp message bubbles.
- * Scrollable list of all the messages in the active chat;
+ * Scrollable list of all the messages in the active chat.
+ * Automatically scrolls to the bottom when new messages are added.
  */
 
 interface MessagesListProps {
@@ -20,6 +21,7 @@ const Container = styled.div`
   flex: 2;
   overflow-y: auto;
   padding: 0 15px;
+  background: transparent;
 `;
 
 const MessageItem = styled.div`
@@ -72,15 +74,28 @@ const Timestamp = styled.div`
   font-weight: 300;
 `;
 
-const MessagesList: React.FC<MessagesListProps> = ({ messages }) => (
-  <Container>
-    {messages.map((message) => (
-      <MessageItem key={message.id}>
-        <Contents>{message.content}</Contents>
-        <Timestamp>{moment(message.createdAt).format('HH:mm')}</Timestamp>
-      </MessageItem>
-    ))}
-  </Container>
-);
+const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new messages are added
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [messages.length]);
+
+  return (
+    <Container ref={containerRef}>
+      {messages.map((message) => (
+        <MessageItem data-testid="message-item" key={message.id}>
+          <Contents data-testid="message-content">{message.content}</Contents>
+          <Timestamp data-testid="message-date">
+            {moment(message.createdAt).format('HH:mm')}
+          </Timestamp>
+        </MessageItem>
+      ))}
+    </Container>
+  );
+};
 
 export default MessagesList;

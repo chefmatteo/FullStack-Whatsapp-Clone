@@ -1,16 +1,21 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import ChatNavbar from './ChatNavbar';
 import MessagesList from './MessagesList';
 import MessageInput from './MessageInput';
-import {History} from 'history';
 
 const Container = styled.div`
-background: url(/assets/chat-background.png) no-repeat center center fixed;
+  background: #e5ddd5 url(/assets/chat-background.jpg) no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
 `;
 
 const getChatQuery = `
@@ -30,8 +35,6 @@ const getChatQuery = `
 
 interface ChatRoomScreenParams {
   chatId: string;
-  history: History;
-  //history is for navigating back to the chats list
 }
 
 export interface ChatQueryMessage {
@@ -59,7 +62,6 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
       try {
         setLoading(true);
         setError(null);
-        
         
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:4000'}/graphql`, {
           method: 'POST',
@@ -93,23 +95,37 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
     fetchChat();
   }, [chatId]);
 
+  const onSendMessage = useCallback(
+    (content: string) => {
+      if (!chat) return null;
+
+      const message = {
+        id: (chat.messages.length + 10).toString(),
+        createdAt: new Date(),
+        content,
+      };
+
+      setChat({
+        // This line copies all properties from the existing 'chat' object into a new object.
+        // Using the spread operator (...) ensures that we don't mutate the original 'chat' object,
+        // which helps maintain immutability in React state updates.
+        ...chat,
+        messages: chat.messages.concat(message), //concat the message to the messages array
+      });
+    },
+    [chat]
+  );
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!chat) return <div>Chat not found</div>;
 
   return (
-    <div>
-      <img src={chat.picture} alt="Profile" />
-      <div>{chat.name}</div>
-      <ul>
-        {chat.messages.map((message) => (
-          <li key={message.id}>
-            <div>{message.content}</div>
-            <div>{new Date(message.createdAt).toLocaleString()}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Container>
+      <ChatNavbar chat={chat} />
+      {chat.messages && <MessagesList messages={chat.messages} />}
+      <MessageInput onSendMessage={onSendMessage} />
+    </Container>
   );
 };
 
