@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ChatNavbar from './ChatNavbar';
 import { ChatQueryResult } from './index';
+import { TEST_IMAGE_URL, TEST_EXTERNAL_IMAGE_URL } from '../../config/urls';
 
 // Mock useNavigate hook completely
 const mockNavigate = jest.fn();
@@ -13,7 +14,7 @@ describe('ChatNavbar', () => {
   const mockChat: ChatQueryResult = {
     id: '1',
     name: 'Foo Bar',
-    picture: 'https://localhost:4000/picture.jpg',
+    picture: TEST_IMAGE_URL,
     messages: [
       {
         id: '1',
@@ -38,7 +39,7 @@ describe('ChatNavbar', () => {
     expect(screen.getByText('Foo Bar')).toBeInTheDocument();
     expect(screen.getByAltText('Foo Bar profile picture')).toHaveAttribute(
       'src',
-      'https://localhost:4000/picture.jpg'
+      TEST_IMAGE_URL
     );
   });
 
@@ -69,11 +70,11 @@ describe('ChatNavbar', () => {
     const customChat = { 
       ...mockChat, 
       name: 'John Doe',
-      picture: 'https://example.com/john.jpg'
+      picture: TEST_EXTERNAL_IMAGE_URL
     };
     render(<ChatNavbar chat={customChat} />);
 
     const profileImage = screen.getByAltText('John Doe profile picture');
-    expect(profileImage).toHaveAttribute('src', 'https://example.com/john.jpg');
+    expect(profileImage).toHaveAttribute('src', TEST_EXTERNAL_IMAGE_URL);
   });
 });

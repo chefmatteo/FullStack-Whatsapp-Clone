@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useCallback, useEffect, useState } from 'react'; 
 //used for fetching data from the server
 import {History} from 'history';
+import { getGraphQLUrl } from '../../config/urls';
 
 const Container = styled.div`
   height: calc(100% - 56px);
@@ -117,7 +118,7 @@ const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
     const fetchChats = async () => {
       try {
         const body = await fetch(
-          `${process.env.REACT_APP_SERVER_URL || 'http://localhost:4000'}/graphql`,
+          getGraphQLUrl(),
           {
             method: 'POST',
             headers: {

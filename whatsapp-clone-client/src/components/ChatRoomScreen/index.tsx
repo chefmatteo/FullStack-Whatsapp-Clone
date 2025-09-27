@@ -1,9 +1,13 @@
 import React from 'react';
-import { useEffect, useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import gql from 'graphql-tag';
+import { useApolloClient, useQuery } from 'react-apollo';
 import styled from 'styled-components';
 import ChatNavbar from './ChatNavbar';
 import MessagesList from './MessagesList';
 import MessageInput from './MessageInput';
+import { getGraphQLUrl } from '../../config/urls';
+
 
 const Container = styled.div`
   background: #e5ddd5 url(/assets/chat-background.jpg) no-repeat center center;
@@ -18,7 +22,8 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const getChatQuery = `
+//using graphql-tag to parse the query string into an AST
+const getChatQuery = gql` 
   query GetChat($chatId: ID!) {
     chat(chatId: $chatId) {
       id
@@ -41,6 +46,7 @@ export interface ChatQueryMessage {
   id: string;
   content: string;
   createdAt: Date;
+  _typename: string;
 }
 
 export interface ChatQueryResult {
@@ -50,50 +56,13 @@ export interface ChatQueryResult {
   messages: Array<ChatQueryMessage>;
 }
 
-type OptionalChatQueryResult = ChatQueryResult | null;
 
 const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
-  const [chat, setChat] = useState<OptionalChatQueryResult>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchChat = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:4000'}/graphql`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: getChatQuery,
-            variables: { chatId },
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
-        
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        setChat(result.data.chat);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChat();
-  }, [chatId]);
+  const client = useApolloClient();
+  const { data, loading, error } = useQuery<any>(getChatQuery, {
+    variables: { chatId },
+  });
+  const chat = data?.chat;
 
   const onSendMessage = useCallback(
     (content: string) => {
@@ -105,19 +74,23 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
         content,
       };
 
-      setChat({
-        // This line copies all properties from the existing 'chat' object into a new object.
-        // Using the spread operator (...) ensures that we don't mutate the original 'chat' object,
-        // which helps maintain immutability in React state updates.
-        ...chat,
-        messages: chat.messages.concat(message), //concat the message to the messages array
+      // Update Apollo Client cache directly
+      client.writeQuery({
+        query: getChatQuery,
+        variables: { chatId },
+        data: {
+          chat: {
+            ...chat,
+            messages: chat.messages.concat(message),
+          },
+        },
       });
     },
-    [chat]
+    [chat, client, chatId]
   );
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error.message}</div>;
   if (!chat) return <div>Chat not found</div>;
 
   return (

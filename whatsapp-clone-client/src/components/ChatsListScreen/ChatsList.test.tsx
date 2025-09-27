@@ -35,7 +35,7 @@ describe('ChatsList', () => {
             {
               id: 1,
               name: 'Foo Bar',
-              picture: 'https://localhost:4000/picture.jpg',
+              picture: process.env.REACT_APP_TEST_IMAGE_URL || 'https://localhost:4000/picture.jpg',
               lastMessage: {
                 id: 1,
                 content: 'Hello',
@@ -61,7 +61,7 @@ describe('ChatsList', () => {
       expect(getByTestId('name')).toHaveTextContent('Foo Bar');
       expect(getByTestId('picture')).toHaveAttribute(
         'src',
-        'https://localhost:4000/picture.jpg'
+        process.env.REACT_APP_TEST_IMAGE_URL || 'https://localhost:4000/picture.jpg'
       );
       expect(getByTestId('content')).toHaveTextContent('Hello');
       expect(getByTestId('date')).toHaveTextContent(/\d{2}:\d{2}/);
@@ -76,7 +76,7 @@ describe('ChatsList', () => {
             {
               id: 1,
               name: 'Foo Bar',
-              picture: 'https://localhost:4000/picture.jpg',
+              picture: process.env.REACT_APP_TEST_IMAGE_URL || 'https://localhost:4000/picture.jpg',
               lastMessage: {
                 id: 1,
                 content: 'Hello',

@@ -30,6 +30,7 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
+    "@apollo/react-hooks": "4.0.0",
     "@graphql-tools/schema": "^10.0.25",
     "@types/react-router-dom": "5.3.3",
     "apollo-server": "3.13.0",
@@ -40,6 +41,7 @@
     "graphql": "16.11.0",
     "graphql-import": "1.0.2",
     "graphql-scalars": "1.24.2",
+    "graphql-tag": "2.12.6",
     "graphql-tools": "9.0.20",
     "react-router-dom": "7.9.1"
   },

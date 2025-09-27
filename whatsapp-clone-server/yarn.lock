@@ -2,6 +2,19 @@
 # yarn lockfile v1
 
 
+"@apollo/client@latest":
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.0.6.tgz#0432d6039f54a3ed72572d13414f135b8f88f331"
+  integrity sha512-j+1NCQtNs/c0bES370l8OtggFR8ennMaiUm9oK9rs+Q4KPJB64Ui7G1PyJ/4PSPsn/XznZassN3lsi6yBRrvDA==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    "@wry/caches" "^1.0.0"
+    "@wry/equality" "^0.5.6"
+    "@wry/trie" "^0.5.0"
+    graphql-tag "^2.12.6"
+    optimism "^0.18.0"
+    tslib "^2.3.0"
+
 "@apollo/client@~3.2.5 || ~3.3.0 || ~3.4.0 || ~3.5.0 || ~3.6.0 || ~3.7.0 || ~3.8.0 || ~3.9.0 || ~3.10.0 || ~3.11.0 || ~3.12.0 || ~3.13.0":
   version "3.13.9"
   resolved "https://registry.npmjs.org/@apollo/client/-/client-3.13.9.tgz"
@@ -76,6 +89,13 @@
     "@protobufjs/utf8" "^1.1.0"
     "@types/long" "^4.0.0"
     long "^4.0.0"
+
+"@apollo/react-hooks@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@apollo/react-hooks/-/react-hooks-4.0.0.tgz#7bf7b320c90d276f637d9a84b503e17b840dd4e6"
+  integrity sha512-fCu0cbne3gbUl0QbA8X4L33iuuFVQbC5Jo2MIKRK8CyawR6PoxDpFdFA1kc6033ODZuZZ9Eo4RdeJFlFIIYcLA==
+  dependencies:
+    "@apollo/client" latest
 
 "@apollo/usage-reporting-protobuf@^4.0.0":
   version "4.1.1"
@@ -3106,7 +3126,7 @@ graphql-scalars@1.24.2:
   dependencies:
     tslib "^2.5.0"
 
-graphql-tag@^2.11.0, graphql-tag@^2.12.6:
+graphql-tag@2.12.6, graphql-tag@^2.11.0, graphql-tag@^2.12.6:
   version "2.12.6"
   resolved "https://registry.npmjs.org/graphql-tag/-/graphql-tag-2.12.6.tgz"
   integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==
@@ -3150,7 +3170,7 @@ graphql-tools@^4.0.8:
 
 graphql@*, graphql@16.11.0:
   version "16.11.0"
-  resolved "https://registry.npmjs.org/graphql/-/graphql-16.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.11.0.tgz#96d17f66370678027fdf59b2d4c20b4efaa8a633"
   integrity sha512-mS1lbMsxgQj6hge1XZ6p7GPhbrtFwUFYi3wRzXAC/FmYnyXMTvvI3td3rjmQ2u8ewXueaSvRPWaEcgVVOT9Jnw==
 
 handlebars@^4.7.8:
