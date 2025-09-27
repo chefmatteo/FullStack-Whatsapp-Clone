@@ -33,6 +33,7 @@ const getChatQuery = gql`
         id
         content
         createdAt
+        __typename
       }
     }
   }
@@ -46,7 +47,7 @@ export interface ChatQueryMessage {
   id: string;
   content: string;
   createdAt: Date;
-  _typename: string;
+  __typename: string;
 }
 
 export interface ChatQueryResult {
@@ -66,25 +67,34 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ chatId }) => {
 
   const onSendMessage = useCallback(
     (content: string) => {
-      if (!chat) return null;
+      if (!chat) {
+        console.error('Chat is not available for sending message');
+        return null;
+      }
 
       const message = {
         id: (chat.messages.length + 10).toString(),
         createdAt: new Date(),
         content,
+        __typename: 'Message',
       };
 
-      // Update Apollo Client cache directly
-      client.writeQuery({
-        query: getChatQuery,
-        variables: { chatId },
-        data: {
-          chat: {
-            ...chat,
-            messages: chat.messages.concat(message),
+      try {
+        // Update Apollo Client cache directly
+        client.writeQuery({
+          query: getChatQuery,
+          variables: { chatId },
+          data: {
+            chat: {
+              ...chat,
+              messages: chat.messages.concat(message),
+            },
           },
-        },
-      });
+        });
+        console.log('Message added to cache successfully:', message);
+      } catch (error) {
+        console.error('Error updating cache:', error);
+      }
     },
     [chat, client, chatId]
   );

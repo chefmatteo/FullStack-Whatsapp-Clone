@@ -20,11 +20,13 @@ describe('ChatNavbar', () => {
         id: '1',
         content: 'foo',
         createdAt: new Date('1 Jan 2019 GMT'),
+        __typename: 'Message',
       },
       {
         id: '2',
         content: 'bar',
         createdAt: new Date('1 Jan 2019 GMT'),
+        __typename: 'Message',
       },
     ],
   };

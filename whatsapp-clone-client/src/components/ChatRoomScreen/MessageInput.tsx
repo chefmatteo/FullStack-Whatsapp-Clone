@@ -25,23 +25,28 @@ interface MessageInputProps {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  height: 60px;
-  padding: 10px;
+  height: 80px;
+  padding: 12px 16px;
   background-color: #f0f0f0;
   border-top: 1px solid #e0e0e0;
-  gap: 10px;
+  gap: 12px;
+  min-height: 80px;
 `;
 
 const InputField = styled.input`
   flex: 1;
   border: none;
   border-radius: 25px;
-  padding: 12px 20px;
+  padding: 16px 24px;
   font-size: 16px;
+  line-height: 1.4;
   outline: none;
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease;
+  min-height: 48px;
+  max-height: 120px;
+  resize: none;
 
   &:focus {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
@@ -49,6 +54,7 @@ const InputField = styled.input`
 
   &::placeholder {
     color: #999;
+    font-size: 16px;
   }
 
   &:disabled {
@@ -59,28 +65,35 @@ const InputField = styled.input`
 `;
 
 const SendButton = styled(Button)`
-  min-width: 50px !important;
-  width: 50px !important;
-  height: 50px !important;
+  min-width: 56px !important;
+  width: 56px !important;
+  height: 56px !important;
   border-radius: 50% !important;
   background-color: #25d366 !important;
   color: white !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
 
   &:hover {
     background-color: #22c55e !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    transform: scale(1.05) !important;
+  }
+
+  &:active {
+    transform: scale(0.95) !important;
   }
 
   &:disabled {
     background-color: #e0e0e0 !important;
     color: #999 !important;
     box-shadow: none !important;
+    transform: none !important;
   }
 
   svg {
-    font-size: 20px;
+    font-size: 24px;
   }
 `;
 
@@ -90,7 +103,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
 }) => {
   const [message, setMessage] = useState('');
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback((e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     const trimmedMessage = message.trim();
     if (trimmedMessage && onSendMessage) {
       onSendMessage(trimmedMessage);
@@ -111,26 +127,28 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <Container>
-      <InputField
-        data-testedid="message-input"
-        type="text"
-        placeholder="Type a message"
-        value={message}
-        onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
-        disabled={disabled}
-        aria-label="Message input"
-      />
-      <SendButton
-        data-testedid="send-button"
-        variant="contained" //used to style the button
-        color="primary" //used to style the button
-        onClick={handleSend} //used to send the message
-        disabled={disabled || !message.trim()}
-        aria-label="Send message"
-      >
-        <SendIcon />
-      </SendButton>
+      <form onSubmit={handleSend} style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+        <InputField
+          data-testedid="message-input"
+          type="text"
+          placeholder="Type a message"
+          value={message}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          disabled={disabled}
+          aria-label="Message input"
+        />
+        <SendButton
+          data-testedid="send-button"
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={disabled || !message.trim()}
+          aria-label="Send message"
+        >
+          <SendIcon />
+        </SendButton>
+      </form>
     </Container>
   );
 };
