@@ -1,6 +1,21 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+import { ApolloProvider } from 'react-apollo';
+import ReactDom from 'react-dom';
+import { createMockClient } from './test-helpers';
+
+
+
+it ('renders without crashing', () => {
+  const mockClient = createMockClient([]);
+  ReactDom.render(
+    <ApolloProvider client={mockClient}>
+      <App />
+    </ApolloProvider>
+  );
+});
+  
 
 // Mock fetch for tests
 const mockChatsData = {

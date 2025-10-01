@@ -8,6 +8,7 @@ import {
   fireEvent,
   screen,
 } from '@testing-library/react';
+import { mockApolloClient } from '../../test-helpers';
 import ChatsList from './ChatsList';
 
 // Mock fetch for testing
